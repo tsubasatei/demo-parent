@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>8.iframe标签.html</title>
+</head>
+<body>
+<!--ifarme 标签可以在页面上开辟一个小区域显示一个单独的页面
+    ifarme 和a 标签组合使用的步骤:
+    1 在iframe 标签中使用name 属性定义一个名称
+    2 在a 标签的target 属性上设置iframe 的name 的属性值
+    iframe: 只能使用双标签
+-->
+    我是一个单独的完整的页面<br/><br/>
+    <iframe src="4.超链接.html" name="abc" height="500" width="500"></iframe>
+    <ul>
+        <li><a href="1.font标签.html" target="abc">1.font标签.html</a></li>
+        <li><a href="2.特殊字符.html" target="abc">2.特殊字符.html"</a></li>
+        <li><a href="3.内联框架.html" target="abc">3.内联框架.html</a></li>
+    </ul>
+</body>
+</html>
