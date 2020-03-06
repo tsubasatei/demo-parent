@@ -1,11 +1,10 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>尚硅谷会员登录页面</title>
-	<!--写base 标签，永远固定相对路径跳转的结果-->
-	<base href="http://localhost:8080/book/">
-<link type="text/css" rel="stylesheet" href="static/css/style.css" >
+	<%@include file="/pages/common/head.jsp"%>
 </head>
 <body>
 		<div id="login_header">
@@ -23,16 +22,17 @@
 						<div class="login_box">
 							<div class="tit">
 								<h1>尚硅谷会员</h1>
-								<a href="pages/user/regist.html">立即注册</a>
+								<a href="pages/user/regist.jsp">立即注册</a>
 							</div>
 							<div class="msg_cont">
 								<b></b>
-								<span class="errorMsg">请输入用户名和密码</span>
+								<span class="errorMsg">${empty msg ? '请输入用户名和密码':msg}</span>
 							</div>
 							<div class="form">
-								<form action="login" method="post">
+								<form action="userServlet" method="post">
+									<input type="hidden" name="action" value="login">
 									<label>用户名称：</label>
-									<input class="itxt" type="text" placeholder="请输入用户名" autocomplete="off" tabindex="1" name="username" />
+									<input class="itxt" type="text" placeholder="请输入用户名" autocomplete="off" tabindex="1" name="username" value="${username}"/>
 									<br />
 									<br />
 									<label>用户密码：</label>
@@ -47,10 +47,6 @@
 					</div>
 				</div>
 			</div>
-		<div id="bottom">
-			<span>
-				尚硅谷书城.Copyright &copy;2015
-			</span>
-		</div>
+		<%@include file="/pages/common/footer.jsp"%>
 </body>
 </html>

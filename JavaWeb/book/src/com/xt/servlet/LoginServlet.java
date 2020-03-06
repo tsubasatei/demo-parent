@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class LoginServlet extends HttpServlet {
     private UserService userService = new UserServiceImpl();
@@ -22,17 +21,20 @@ public class LoginServlet extends HttpServlet {
         User loginUser = null;
         try {
             loginUser = userService.login(new User(null, username, password, null));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // 如果等于null,说明登录失败!
         if (loginUser == null) {
-        // 跳回登录页面
-            req.getRequestDispatcher("/pages/user/login.html").forward(req, resp);
+            // 把错误信息，和回显的表单项信息，保存到Request 域中
+            req.setAttribute("msg", "用户名或密码错误");
+            req.setAttribute("username", username);
+            // 跳回登录页面
+            req.getRequestDispatcher("/pages/user/login.jsp").forward(req, resp);
         } else {
             // 登录成功
-            // 跳到成功页面login_success.html
-            req.getRequestDispatcher("/pages/user/login_success.html").forward(req, resp);
+            // 跳到成功页面login_success.jsp
+            req.getRequestDispatcher("/pages/user/login_success.jsp").forward(req, resp);
         }
     }
 }
