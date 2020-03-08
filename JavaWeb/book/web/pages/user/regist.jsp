@@ -14,6 +14,11 @@
 	<script src="static/script/jquery-1.7.2.js"></script>
 	<script>
 		$(function () {
+		    // 切换验证码图片
+			$("#code_img").click(function () {
+				this.src = "${basePath}kaptcha.jpg?id=" + new Date();
+            });
+
 			$("#sub_btn").click(function () {
                 /**
 				 * 验证用户名：必须由字母，数字下划线组成，并且长度为5 到12 位
@@ -95,8 +100,8 @@
 									<br />
 									<br />
 									<label>验证码：</label>
-									<input class="itxt" type="text" style="width: 150px;" id="code" name="code"/>
-									<img alt="" src="static/img/code.bmp" style="float: right; margin-right: 40px">
+									<input class="itxt" type="text" style="width: 110px;" id="code" name="code"/>
+									<img alt="" id="code_img" src="kaptcha.jpg" style="float: right; margin-right: 40px; width: 110px; height: 40px;">
 									<br />
 									<br />
 									<input type="submit" value="注册" id="sub_btn" />

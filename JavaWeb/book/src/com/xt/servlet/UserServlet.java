@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
+
 /**
  * 用户登录、注册
  */
@@ -39,6 +41,7 @@ public class UserServlet extends BaseServlet {
             req.getRequestDispatcher("/pages/user/login.jsp").forward(req, resp);
         } else {
             // 登录成功
+            req.getSession().setAttribute("loginUser", loginUser);
             // 跳到成功页面login_success.jsp
             req.getRequestDispatcher("/pages/user/login_success.jsp").forward(req, resp);
         }
@@ -46,6 +49,10 @@ public class UserServlet extends BaseServlet {
 
     // 处理注册的功能
     protected void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取Session中的验证码
+        String token = (String) req.getSession().getAttribute(KAPTCHA_SESSION_KEY);
+        // 删除 Session中的验证码
+        req.getSession().removeAttribute(KAPTCHA_SESSION_KEY);
         // 1、获取请求的参数
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -53,8 +60,9 @@ public class UserServlet extends BaseServlet {
         String code = req.getParameter("code");
 
         User user = WebUtils.copyParam2Bean(new User(), req.getParameterMap());
+
         // 2、检查验证码是否正确=== 写死,要求验证码为:abcde
-        if (code != null && code.equalsIgnoreCase("abcde")) {
+        if (code != null && code.equals(token)) {
             // 3、检查用户名是否可用
             try {
                 if (userService.existsUsername(username)) {
@@ -83,5 +91,13 @@ public class UserServlet extends BaseServlet {
             System.out.println("验证码[" + code + "]错误");
             req.getRequestDispatcher("/pages/user/register.jsp").forward(req, resp);
         }
+    }
+
+    // 登出
+    protected void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 1、销毁Session 中用户登录的信息（或者销毁Session）
+        req.getSession().invalidate();
+        // 2、重定向到首页（或登录页面）。
+        resp.sendRedirect(req.getContextPath());
     }
 }
