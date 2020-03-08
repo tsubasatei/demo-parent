@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,11 @@
 			margin-top: 200px;
 		}
 	</style>
+	<script>
+		$(function () {
+			var status = ['未发货', '已发货', '已签收']
+        })
+	</script>
 </head>
 <body>
 	
@@ -28,27 +34,15 @@
 				<td>金额</td>
 				<td>状态</td>
 				<td>详情</td>
-			</tr>		
-			<tr>
-				<td>2015.04.23</td>
-				<td>90.00</td>
-				<td>未发货</td>
-				<td><a href="#">查看详情</a></td>
-			</tr>	
-			
-			<tr>
-				<td>2015.04.20</td>
-				<td>20.00</td>
-				<td>已发货</td>
-				<td><a href="#">查看详情</a></td>
-			</tr>	
-			
-			<tr>
-				<td>2014.01.23</td>
-				<td>190.00</td>
-				<td>已完成</td>
-				<td><a href="#">查看详情</a></td>
-			</tr>		
+			</tr>
+			<c:forEach items="${orders}" var="order">
+				<tr>
+					<td>${order.createTime}</td>
+					<td>${order.price}</td>
+					<td>${order.status == 0 ? '未收货': '${order.status == 0}?"已收货":"已签收"'}</td>
+					<td><a href="orderServlet?action=showOrderDetails&orderId=${order.orderId}">查看详情</a></td>
+				</tr>
+			</c:forEach>
 		</table>
 		
 	
