@@ -77,4 +77,48 @@
         <servlet-name>OrderServlet</servlet-name>
         <url-pattern>/orderServlet</url-pattern>
     </servlet-mapping>
+
+    <!--filter 标签用于配置一个Filter 过滤器-->
+    <filter>
+        <!--给filter 起一个别名-->
+        <filter-name>ManagerFilter</filter-name>
+        <!--配置filter 的全类名-->
+        <filter-class>com.xt.filter.ManagerFilter</filter-class>
+    </filter>
+    <!--filter-mapping 配置Filter 过滤器的拦截路径-->
+    <filter-mapping>
+        <!--filter-name 表示当前的拦截路径给哪个filter 使用-->
+        <filter-name>ManagerFilter</filter-name>
+        <!--url-pattern 配置拦截路径
+        / 表示请求地址为：http://ip:port/工程路径/ 映射到IDEA 的web 目录
+        /admin/* 表示请求地址为：http://ip:port/工程路径/admin/*
+        -->
+        <url-pattern>/pages/manager/*</url-pattern>
+        <url-pattern>/manager/bookServlet</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>TransactionFilter</filter-name>
+        <filter-class>com.xt.filter.TransactionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>TransactionFilter</filter-name>
+        <!-- /* 表示当前工程下所有请求-->
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--error-page 标签配置，服务器出错之后，自动跳转的页面-->
+    <error-page>
+        <!--error-code 是错误类型-->
+        <error-code>500</error-code>
+        <!--location 标签表示。要跳转去的页面路径-->
+        <location>/pages/error/error500.jsp</location>
+    </error-page>
+    <!--error-page 标签配置，服务器出错之后，自动跳转的页面-->
+    <error-page>
+        <!--error-code 是错误类型-->
+        <error-code>404</error-code>
+        <!--location 标签表示。要跳转去的页面路径-->
+        <location>/pages/error/error404.jsp</location>
+    </error-page>
 </web-app>

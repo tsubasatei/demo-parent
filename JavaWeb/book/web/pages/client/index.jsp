@@ -29,7 +29,7 @@
 					<a href="pages/user/regist.jsp">注册</a> &nbsp;&nbsp;
 				</c:if>
 				<c:if test="${not empty sessionScope.loginUser}">
-					<span>欢迎<span class="um_span">${sessionScope.loginUse.username}</span>光临尚硅谷书城</span>
+					<span>欢迎<span class="um_span">${sessionScope.loginUser.username}</span>光临尚硅谷书城</span>
 					<a href="pages/order/order.jsp">我的订单</a>
 					<a href="userServlet?action=logout">注销</a>&nbsp;&nbsp;
 				</c:if>
@@ -47,12 +47,14 @@
 						<input id="searchByPrice" type="submit" value="查询" />
 				</form>
 			</div>
+			<c:if test="${not empty sessionScope.cart}">
 			<div style="text-align: center">
-				<span>您的购物车中有3件商品</span>
+				<span>您的购物车中有${sessionScope.cart.items.size()}件商品</span>
 				<div>
 					您刚刚将<span style="color: red">${sessionScope.lastName}</span>加入到了购物车中
 				</div>
 			</div>
+			</c:if>
 			<c:forEach items="${page.items}" var="book">
 				<div class="b_list">
 					<div class="img_div">
