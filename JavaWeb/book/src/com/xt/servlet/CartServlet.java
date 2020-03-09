@@ -1,5 +1,6 @@
 package com.xt.servlet;
 
+import com.google.gson.Gson;
 import com.xt.entity.Book;
 import com.xt.entity.Cart;
 import com.xt.entity.CartItem;
@@ -11,12 +12,48 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CartServlet extends BaseServlet{
 
     private BookService bookService = new BookServiceImpl();
 
 
+    // 加入购车
+    protected void ajaxAddItem(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        // 获取请求的参数商品编号
+        int id = WebUtils.parseInt(req.getParameter("id"), 0);
+        // 调用bookService.queryBookById(id):Book 得到图书的信息
+        Book book = bookService.queryBookById(id);
+        if (book == null) {
+            System.out.println("图书不存在编号" + id);
+            return;
+        }
+        CartItem cartItem = new CartItem(book.getId(), book.getName(), 1, book.getPrice(), book.getPrice());
+        // 调用Cart.addItem(CartItem);添加商品项
+        Cart cart = (Cart) req.getSession().getAttribute("cart");
+        if (cart == null) {
+            cart = new Cart();
+            req.getSession().setAttribute("cart", cart);
+        }
+        cart.addItem(cartItem);
+        System.out.println(cart);
+
+        System.out.println("请求头Referer的值：" + req.getHeader("Referer"));
+
+        // 最后一个添加的shangpin
+        req.getSession().setAttribute("lastName", cartItem.getName());
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("lastName", cartItem.getName());
+        resultMap.put("totalCount", cart.getTotalCount());
+        
+        Gson gson = new Gson();
+        String resultMapJsonString = gson.toJson(resultMap);
+        resp.getWriter().write(resultMapJsonString);
+    }
+    
     // 加入购车
     protected void addItem(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         // 获取请求的参数商品编号

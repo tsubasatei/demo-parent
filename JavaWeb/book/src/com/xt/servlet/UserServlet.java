@@ -1,5 +1,6 @@
 package com.xt.servlet;
 
+import com.google.gson.Gson;
 import com.xt.entity.User;
 import com.xt.service.UserService;
 import com.xt.service.impl.UserServiceImpl;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
 
@@ -100,4 +103,18 @@ public class UserServlet extends BaseServlet {
         // 2、重定向到首页（或登录页面）。
         resp.sendRedirect(req.getContextPath());
     }
+
+    // 验证用户名是否可用
+    protected void ajaxExistsUsername(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
+        String username = req.getParameter("username");
+        boolean existsUsername = userService.existsUsername(username);
+        // 把返回的结果封装成为map 对象
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("existsUsername", existsUsername);
+        Gson gson = new Gson();
+        String json = gson.toJson(resultMap);
+        resp.getWriter().write(json);
+    }
+
+
 }

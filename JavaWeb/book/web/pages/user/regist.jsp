@@ -14,6 +14,20 @@
 	<script src="static/script/jquery-1.7.2.js"></script>
 	<script>
 		$(function () {
+
+		    // 验证用户名是否可用
+			$("#username").blur(function () {
+			    var username = this.value;
+				$.getJSON("${basePath}userServlet", "action=ajaxExistsUsername&username=" + username, function (data) {
+					if (data.existsUsername) {
+					    $("span.errorMsg").text("用户名已存在");
+					    return false;
+					} else {
+                        $("span.errorMsg").text("用户名可用");
+					}
+                })
+            })
+
 		    // 切换验证码图片
 			$("#code_img").click(function () {
 				this.src = "${basePath}kaptcha.jpg?id=" + new Date();
